@@ -128,7 +128,7 @@ class BluetoothTerminal {
    * @param {string} data - Data
    */
   receive(data) {
-    // Handle incoming data.
+    console.log(data);
   }
 
   /**

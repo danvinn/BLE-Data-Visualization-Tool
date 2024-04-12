@@ -30,11 +30,13 @@
 </head>
 <body>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <div class="app">
 
         <div class="toolbar">
 
-            <div id="device-name" class="name">Terminal</div>
+            <div id="device-name" class="name">BLE-webTerminal</div>
 
             <div class="buttons">
 
@@ -43,14 +45,18 @@
                 </button>
 
                 <button id="disconnect" type="button" aria-label="Disconnect">
-                    <i class="material-icons">bluetooth_disabled</i>
+                    <i class="material-icons">bluetooth_disabled</i>    
                 </button>
 
             </div>
 
         </div>
 
-        <div id="terminal" class="terminal"></div>
+        <div id="terminal" class="terminal">
+
+        <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+
+        </div>
 
         <form id="send-form" class="send-form">
 
@@ -61,12 +67,12 @@
             </button>
 
         </form>
-
     </div>
 
     <script src="js/BluetoothTerminal.js"></script>
     <script src="js/main.js"></script>
     <script src="js/companion.js" data-service-worker="sw.js"></script>
+
 
 </body>
 </html>
