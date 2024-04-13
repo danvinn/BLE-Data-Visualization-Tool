@@ -33,7 +33,7 @@ As mentioned, different BLE devices implement their own services and characteris
 
 Below is the circuit schematic of my implementation.
 
-!["Circuit diagram"](https://github.com/danvinn/Web-Bluetooth-Terminal/blob/main/misc/Arduino-Bridge/circuitio.png){ width: %15; }
+!["Circuit diagram"](https://github.com/danvinn/Web-Bluetooth-Terminal/blob/main/misc/Arduino-Bridge/circuitio.png="width: 35%")
 
   
 Open Serial Monitor in Arduino IDE, switch baudrate to `9600` and line endings to `Both NL & CR`. Next, launch the terminal and be able to make a small talk between the Terminal and the Serial Monitor!
