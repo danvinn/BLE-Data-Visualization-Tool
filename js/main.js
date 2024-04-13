@@ -93,13 +93,21 @@ function updateDataForChart(dataString) {
   const newLabel = updateDataForChart.dataPointNumber || 0; // Update label if needed
   updateDataForChart.dataPointNumber = newLabel + 1;
 
+  const newX = parseFloat(values[0]);
+  const newY = parseFloat(values[1]);
+  const newZ = parseFloat(values[2]);
+
+  /*
   chartConfig.data.labels.push(newLabel); // Add a timestamp for each data point
   chartConfig.data.datasets[0].data.push(parseFloat(values[0])); // Push X-axis value
   chartConfig.data.datasets[1].data.push(parseFloat(values[1])); // Push Y-axis value
   chartConfig.data.datasets[2].data.push(parseFloat(values[2])); // Push Z-axis value
+  */
+
+  const newData = [newX, newY, newZ]; 
 
   // Update the chart with the new data
-  myChart.update();
+  addData(myChart, newLabel, newData);
 
 }
 
@@ -123,8 +131,8 @@ function updateDataForChart(dataString) {
 terminal.receive = function(data) {
   logToTerminal(data, 'in');
   const receivedData = data;
-  simulateData();
-  //updateDataForChart(receivedData);
+  //simulateData();
+  updateDataForChart(receivedData);
 };
 
 // Override default log method to output messages to the terminal and console.
