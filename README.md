@@ -1,4 +1,4 @@
-# Web Bluetooth Terminal
+# BLE-Data Visualization Tool 
 
   
 
@@ -6,10 +6,10 @@
 
   
 
-This BLE Webapp is a project built upon **[Loginov's Bluetooth Terminal.](https://github.com/loginov-rocks/bluetooth-terminal)**
+This BLE-Data Visualization Tool is a project built upon **[Loginov's Bluetooth Terminal.](https://github.com/loginov-rocks/bluetooth-terminal)**
 
 
-Web Bluetooth Terminal is a website that can **connect** with the remote devices which support **Bluetooth Low Energy.**
+The BLE-Data Visualization Tool can **connect** with the remote devices which support **Bluetooth Low Energy.**
 
 My goal was to utilize this terminal and allow **any** compatible microcontroller and sensor to comunicate and transmit data. 
 
