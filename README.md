@@ -32,7 +32,6 @@ The application utilises BLE service (`0xFFE0`) and characteristic (`0xFFE1`) av
 As mentioned, different BLE devices implement their own services and characteristics to communicate with, but you can build your own simple device: you just need a BLE module (e.g. HM-10, JDY-08, AT-09, CC41-A) and an Arduino Uno. 
 
 Below is the circuit schematic of my implementation.
-  
 
 !["Circuit diagram"](https://github.com/danvinn/Web-Bluetooth-Terminal/blob/main/misc/Arduino-Bridge/circuitio.png)
 
