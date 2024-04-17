@@ -30,6 +30,8 @@
 </head>
 <body>
 
+    <input type="button" value="Stop" onclick="stopDataGeneration()" />
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <div class="app">
@@ -52,12 +54,35 @@
 
         </div>
 
-        <div id="terminal" class="terminal">
-
-        <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
-
+        
+        <div class="top-right">
+            <div id="terminal" class="terminal">
+                <script src="js/BluetoothTerminal.js"></script>
+            </div>
         </div>
 
+
+        <canvas id="myChart" style="width:100%;max-width:850px"></canvas>
+        
+        <table id="data-table">
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>X-mag</th>
+                <th>Y-mag</th>
+                <th>Z-mag</th>
+                <th>X-accel</th>
+                <th>Y-accel</th>
+                <th>Z-accel</th>
+              </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+
+        </div>
+            
         <form id="send-form" class="send-form">
 
             <input id="input" type="text" aria-label="Input" autocomplete="off" placeholder="Type something to send...">
@@ -69,7 +94,6 @@
         </form>
     </div>
 
-    <script src="js/BluetoothTerminal.js"></script>
     <script src="js/main.js"></script>
     <script src="js/companion.js" data-service-worker="sw.js"></script>
 

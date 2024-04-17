@@ -10,6 +10,12 @@ const inputField = document.getElementById('input');
 const defaultDeviceName = 'Terminal';
 const terminalAutoScrollingLimit = terminalContainer.offsetHeight / 2;
 let isTerminalAutoScrolling = true;
+let isGeneratingData = true;
+let updateInterval = null;
+
+let tableData = [];
+
+let currentDataPoint = 0;
 
 const scrollElement = (element) => {
   const scrollTop = element.scrollHeight - element.offsetHeight;
@@ -58,6 +64,24 @@ const data = {
     backgroundColor: 'red',
     borderColor: 'red',
     data: [],
+  },
+  {
+    label: 'X-accel (m/s^2)',
+    backgroundColor: 'yellow',
+    borderColor: 'yellow',
+    data: [],
+  },
+  {
+    label: 'Y-accel (m/s^2)',
+    backgroundColor: 'pink',
+    borderColor: 'pink',
+    data: [],
+  },
+  {
+    label: 'Z-accel (m/s^2)',
+    backgroundColor: 'purple',
+    borderColor: 'purple',
+    data: [],
   }
 ]
 };
@@ -73,66 +97,108 @@ const myChart = new Chart(
   config
 );
 
-// function to update the chart 
+// function to update the chart and table
 function addData(chart, label, data) {
   chart.data.labels.push(label);
-  chart.data.datasets.forEach((dataset) => {
-    dataset.data.push(data);
+  chart.data.datasets.forEach((dataset,index) => {
+    dataset.data.push(data[index]);
   });
   chart.update();
-}
 
-function updateDataForChart(dataString) {
+  tableData.push({label, ...data});
 
-  const values = dataString.split(','); // Split the string by commas
-  if (values.length !== 3) {
-    console.error("Invalid data format. Expected 3 comma-separated values.");
-    return;
+  if (tableData.length > 0) {
+    showDataTable();
   }
 
-  const newLabel = updateDataForChart.dataPointNumber || 0; // Update label if needed
-  updateDataForChart.dataPointNumber = newLabel + 1;
+}
 
-  const newX = parseFloat(values[0]);
-  const newY = parseFloat(values[1]);
-  const newZ = parseFloat(values[2]);
+function startDataGeneration() {
 
-  /*
-  chartConfig.data.labels.push(newLabel); // Add a timestamp for each data point
-  chartConfig.data.datasets[0].data.push(parseFloat(values[0])); // Push X-axis value
-  chartConfig.data.datasets[1].data.push(parseFloat(values[1])); // Push Y-axis value
-  chartConfig.data.datasets[2].data.push(parseFloat(values[2])); // Push Z-axis value
-  */
+  if (!updateInterval) {
+    updateInterval = setInterval(() => {
+      runData();
 
-  const newData = [newX, newY, newZ]; 
 
-  // Update the chart with the new data
+    }, 1000);
+  }
+}
+
+function stopDataGeneration(){
+  clearInterval(updateInterval);
+  updateInterval = null;
+  isGeneratingData = false;
+}
+
+function runData(dataString) {
+  
+  if(isGeneratingData){
+
+    currentDataPoint++;
+
+    const values = dataString.split(','); // Split the string by commas
+    if (values.length !== 6) {
+
+      console.error("Invalid data format. Expected 3 comma-separated values.");
+      return;
+
+  }
+
+  const newLabel = currentDataPoint; // Update label if needed
+
+  const magX = parseFloat(values[0]);
+  const magY = parseFloat(values[1]);
+  const magZ = parseFloat(values[2]);
+
+  const accelX = parseFloat(values[3]);
+  const accelY = parseFloat(values[4]);
+  const accelZ = parseFloat(values[5]);
+
+  const newData = [magX,magY,magZ,accelX,accelY,accelZ]; // Array containing all six values
+  
   addData(myChart, newLabel, newData);
+
+  }
 
 }
 
-// below is used for one value parsing in
+function showDataTable() {
 
-/*
-  let dataPointNumber = updateDataForChart.dataPointNumber || 0;
+  const tableBody = document.getElementById('data-table').getElementsByTagName('tbody')[0];
+  tableBody.innerHTML = '';
 
-  updateDataForChart.dataPointNumber = dataPointNumber + 1;
+  if (tableData.length === 0){
+    const newRow = tableBody.insertRow();
+    const cell = newRow.insertCell();
+    cell.colSpan = 7;
+    cell.textContent = 'No data available yet';
+  } else {
 
-  const newLabel = dataPointNumber; // Update label if needed
-  const newData = parseFloat(data); // Convert string to float
-  addData(myChart, newLabel, newData);
-  */
+    tableData.forEach(data => {
+      const newRow = tableBody.insertRow();
 
-//updateDataForChart.dataPointNumber = 0;
+      newRow.insertCell().textContent = data.label;
+      newRow.insertCell().textContent = data[0];
+      newRow.insertCell().textContent = data[1];
+      newRow.insertCell().textContent = data[2];
+      newRow.insertCell().textContent = data[3];
+      newRow.insertCell().textContent = data[4];
+      newRow.insertCell().textContent = data[5];
 
+  
+    });
+  }
+}
 
 
 // Override `receive` method to log incoming data to the terminal.
 terminal.receive = function(data) {
-  logToTerminal(data, 'in');
+  //logToTerminal(data, 'in');
+
   const receivedData = data;
-  //simulateData();
-  updateDataForChart(receivedData);
+
+  runData(receivedData);
+
 };
 
 // Override default log method to output messages to the terminal and console.
