@@ -13,7 +13,7 @@
     <meta name="description"
           content="Progressive Web Application for serial communication with your own Bluetooth Low Energy (Smart) devices">
 
-    <title>Web Bluetooth Terminal</title>
+    <title>BLE-Data-Visualization-Tool</title>
 
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
@@ -38,7 +38,7 @@
 
         <div class="toolbar">
 
-            <div id="device-name" class="name">BLE-webTerminal</div>
+            <div id="device-name" class="name">BLE-Data-Visualization-Tool</div>
 
             <div class="buttons">
 
@@ -51,36 +51,53 @@
                 </button>
 
             </div>
-
+        
         </div>
 
-        
+        <div class="top-left" style="height: 1000px; width: 1000px;">
+            <canvas id="magGraph" style="width: 800px;height: 400px;"></canvas>
+        </div>
+        <div class="top-left2" style="height: 1000px; width: 1000px;">
+            <canvas id="accelGraph" style="width: 800px;height: 400px;"></canvas>
+        </div>
         <div class="top-right">
             <div id="terminal" class="terminal">
                 <script src="js/BluetoothTerminal.js"></script>
             </div>
         </div>
+    
+        <div class = "bottom-left">
+            <table id="mag-table">
+                <thead>
+                  <tr>
+                    <th>Time</th>
+                    <th>X-mag</th>
+                    <th>Y-mag</th>
+                    <th>Z-mag</th>
+                  </tr>
+                </thead>
+                <tbody>
+    
+                </tbody>
+            </table>
+        </div>
 
-
-        <canvas id="myChart" style="width:100%;max-width:850px"></canvas>
+        <div class = "bottom-left2">
+            <table id="accel-table">
+                <thead>
+                  <tr>
+                    <th>Time</th>
+                    <th>X-accel</th>
+                    <th>Y-accel</th>
+                    <th>Z-accel</th>
+                  </tr>
+                </thead>
+                <tbody>
+    
+                </tbody>
+            </table>
+        </div>
         
-        <table id="data-table">
-            <thead>
-              <tr>
-                <th>Time</th>
-                <th>X-mag</th>
-                <th>Y-mag</th>
-                <th>Z-mag</th>
-                <th>X-accel</th>
-                <th>Y-accel</th>
-                <th>Z-accel</th>
-              </tr>
-            </thead>
-            <tbody>
-
-            </tbody>
-        </table>
-
         </div>
             
         <form id="send-form" class="send-form">

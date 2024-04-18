@@ -37,13 +37,14 @@ const logToTerminal = (message, type = '') => {
 // Obtain configured instance.
 const terminal = new BluetoothTerminal();
 
-const canvas = document.getElementById('myChart');
-canvas.height = 200;
+const canvas = document.getElementById('magGraph');
 
-const labels = [
-  '0'
-];
+const canvas2 = document.getElementById('accelGraph')
 
+
+const labels1 = ['0'];
+
+/*
 const data = {
   labels: labels,
   datasets: [
@@ -85,25 +86,87 @@ const data = {
   }
 ]
 };
+*/
 
-const config = {
+const config1 = {
   type: 'line',
-  data: data,
+  data: {
+    labels: labels1,
+    datasets: [{
+      label: 'X-axis (mG)',
+      backgroundColor: 'blue',
+      borderColor: 'blue',
+      data: [],
+    },
+    {
+      label: 'Y-axis (mG)',
+      backgroundColor: 'green',
+      borderColor: 'green',
+      data: [],
+    },
+    {
+      label: 'Z-axis (mG)',
+      backgroundColor: 'red',
+      borderColor: 'red',
+      data: [],
+    }]
+  },
   options: {}
 };
 
-const myChart = new Chart(
+const config2 = {
+  type: 'line',
+  data: {
+    labels: labels1,
+    datasets: [
+    {
+      label: 'X-accel (m/s^2)',
+      backgroundColor: 'yellow',
+      borderColor: 'yellow',
+      data: [],
+    },
+    {
+      label: 'Y-accel (m/s^2)',
+      backgroundColor: 'pink',
+      borderColor: 'pink',
+      data: [],
+    },
+    {
+      label: 'Z-accel (m/s^2)',
+      backgroundColor: 'purple',
+      borderColor: 'purple',
+      data: [],
+    }]
+  },
+  options: {}
+};
+
+const magChart = new Chart(
   canvas,
-  config
+  config1
 );
 
+const accelChart = new Chart(
+  canvas2,
+  config2
+);
+
+
+
 // function to update the chart and table
-function addData(chart, label, data) {
-  chart.data.labels.push(label);
-  chart.data.datasets.forEach((dataset,index) => {
-    dataset.data.push(data[index]);
+function addData(magchart,accelchart,label,magdata,acceldata,data) {
+  magchart.data.labels.push(label);
+  magchart.data.datasets.forEach((dataset,index) => {
+    dataset.data.push(magdata[index]);
   });
-  chart.update();
+
+  accelchart.data.labels.push(label);
+  accelchart.data.datasets.forEach((dataset,index) => {
+    dataset.data.push(acceldata[index]);
+  });
+  
+  magchart.update();
+  accelchart.update();
 
   tableData.push({label, ...data});
 
@@ -154,9 +217,13 @@ function runData(dataString) {
   const accelY = parseFloat(values[4]);
   const accelZ = parseFloat(values[5]);
 
-  const newData = [magX,magY,magZ,accelX,accelY,accelZ]; // Array containing all six values
+  const magData = [magX,magY,magZ];
+  const accelData = [accelX,accelY,accelZ];
+
+  const table_Data = [magX,magY,magZ,accelX,accelY,accelZ];
+  // Array containing all six values
   
-  addData(myChart, newLabel, newData);
+  addData(magChart,accelChart,newLabel,magData,accelData,table_Data);
 
   }
 
@@ -164,27 +231,44 @@ function runData(dataString) {
 
 function showDataTable() {
 
-  const tableBody = document.getElementById('data-table').getElementsByTagName('tbody')[0];
-  tableBody.innerHTML = '';
+  const magtableBody = document.getElementById('mag-table').getElementsByTagName('tbody')[0];
+  const acceltableBody = document.getElementById('accel-table').getElementsByTagName('tbody')[0];
+
+  magtableBody.innerHTML = '';
+  acceltableBody.innerHTML = '';
 
   if (tableData.length === 0){
-    const newRow = tableBody.insertRow();
+    const newRow = magtableBody.insertRow();
     const cell = newRow.insertCell();
-    cell.colSpan = 7;
+    cell.colSpan = 4;
     cell.textContent = 'No data available yet';
   } else {
 
     tableData.forEach(data => {
-      const newRow = tableBody.insertRow();
+      const newRow = magtableBody.insertRow();
 
       newRow.insertCell().textContent = data.label;
       newRow.insertCell().textContent = data[0];
       newRow.insertCell().textContent = data[1];
       newRow.insertCell().textContent = data[2];
+  
+    });
+  }
+
+  if (tableData.length === 0){
+    const newRow = acceltableBody.insertRow();
+    const cell = newRow.insertCell();
+    cell.colSpan = 4;
+    cell.textContent = 'No data available yet';
+  } else {
+
+    tableData.forEach(data => {
+      const newRow = acceltableBody.insertRow();
+
+      newRow.insertCell().textContent = data.label;
       newRow.insertCell().textContent = data[3];
       newRow.insertCell().textContent = data[4];
       newRow.insertCell().textContent = data[5];
-
   
     });
   }
